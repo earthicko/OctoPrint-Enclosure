@@ -40,7 +40,7 @@ Here are detailled instructions on how to setup them.
 
 ### Temperature sensors
 
-To control the enclosure temperature or get temperature triggered events, you need to install and configure a temperature sensor. This plugin can support DHT11, DHT22, AM2302, DS18B20, SI7021, BME280 and TMP102 temperature sensors.
+To control the enclosure temperature or get temperature triggered events, you need to install and configure a temperature sensor. This plugin can support DHT11, DHT22, AM2302, DS18B20, SI7021, HTU21D, BME280 and TMP102 temperature sensors.
 
 
 #### DHT11, DHT22 and AM2302 sensors
@@ -111,7 +111,7 @@ Copy the serial number, you will need to configure the plugin.  Note that for th
 
 The DS18B20 needs a pullup resistor on the data pin. On modern Pi models, you can use a resistor built into the Pi, configured in software. To do this, set the "Input Pull Resistor" option to "Input Pullup". If this doesn't work, you need to use a 4.7K to 10K resistor from the data pin to VCC.
 
-#### SI7021, BME280, TMP102 and MCP9808 sensors
+#### SI7021, HTU21D, BME280, TMP102 and MCP9808 sensors
 
 Enable I2C on your raspberry pi, depending on raspi-config version, step by step can be different:
 

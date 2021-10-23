@@ -994,6 +994,8 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                     hum = 0
                 elif sensor['temp_sensor_type'] == "si7021":
                     temp, hum = self.read_si7021_temp(sensor['temp_sensor_address'], sensor['temp_sensor_i2cbus'])
+                elif sensor['temp_sensor_type'] == "htu21d":
+                    temp, hum = self.read_htu21d_temp(sensor['temp_sensor_address'], sensor['temp_sensor_i2cbus'])
                 elif sensor['temp_sensor_type'] == "tmp102":
                     temp = self.read_tmp102_temp(sensor['temp_sensor_address'])
                     hum = 0
@@ -1188,6 +1190,27 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
             stdout = (Popen(cmd, shell=True, stdout=PIPE).stdout).read()
             if  self._settings.get(["debug_temperature_log"]) is True:
                 self._logger.debug("SI7021 result: %s", stdout)
+            temp, hum = stdout.decode("utf-8").split("|")
+            return (self.to_float(temp.strip()), self.to_float(hum.strip()))
+        except Exception as ex:
+            self._logger.info(
+                "Failed to execute python scripts, try disabling use SUDO on advanced section of the plugin.")
+            self.log_error(ex)
+            return (0, 0)
+
+    def read_htu21d_temp(self, address, i2cbus):
+        try:
+            script = os.path.dirname(os.path.realpath(__file__)) + "/HTU21D.py "
+            if self._settings.get(["use_sudo"]):
+                sudo_str = "sudo "
+            else:
+                sudo_str = ""
+            cmd = sudo_str + "python " + script + str(address) + " " + str(i2cbus)
+            if self._settings.get(["debug_temperature_log"]) is True:
+                self._logger.debug("Temperature HTU21D cmd: %s", cmd)
+            stdout = (Popen(cmd, shell=True, stdout=PIPE).stdout).read()
+            if self._settings.get(["debug_temperature_log"]) is True:
+                self._logger.debug("HTU21D result: %s", stdout)
             temp, hum = stdout.decode("utf-8").split("|")
             return (self.to_float(temp.strip()), self.to_float(hum.strip()))
         except Exception as ex:
