@@ -1201,11 +1201,7 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
     def read_htu21d_temp(self, address, i2cbus):
         try:
             script = os.path.dirname(os.path.realpath(__file__)) + "/HTU21D.py "
-            if self._settings.get(["use_sudo"]):
-                sudo_str = "sudo "
-            else:
-                sudo_str = ""
-            cmd = sudo_str + "python " + script + str(address) + " " + str(i2cbus)
+            cmd = "python3 " + script + str(address) + " " + str(i2cbus)
             if self._settings.get(["debug_temperature_log"]) is True:
                 self._logger.debug("Temperature HTU21D cmd: %s", cmd)
             stdout = (Popen(cmd, shell=True, stdout=PIPE).stdout).read()

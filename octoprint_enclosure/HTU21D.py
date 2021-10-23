@@ -218,7 +218,7 @@ if __name__ == "__main__":
             busNum = int(sys.argv[2], 16)
         else:
             busNum = 1
-        h = HTU21D(busnum=busNum, address=hex(address))
+        h = HTU21D(busnum=busNum, address=address)
         print('{0:0.1f} | {1:0.1f}'.format(h.read_temperature(), h.read_humidity()))
     else:
         exit(1)
